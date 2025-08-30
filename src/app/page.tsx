@@ -3,6 +3,7 @@ import Navbar from '@/components/navbar'
 import Hero from '@/components/Hero'
 import QuickCategories from '@/components/QuickCategories'
 import ProductList from '@/components/productList'
+import NewArrivals from '@/components/NewArrivals'
 import Incentive from '@/components/Incentive'
 import HowItWorks from '@/components/HowItWorks'
 import CommunityStats from '@/components/CommunityStats'
@@ -33,6 +34,7 @@ export default function Home() {
         <Hero />
         <QuickCategories />
         <ProductList />
+        <NewArrivals />
         <Incentive />
         <HowItWorks />
         
