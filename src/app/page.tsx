@@ -1,5 +1,3 @@
-import AnnouncementBar from '@/components/AnnouncementBar'
-import Navbar from '@/components/navbar'
 import Hero from '@/components/Hero'
 import QuickCategories from '@/components/QuickCategories'
 import ProductList from '@/components/productList'
@@ -9,7 +7,6 @@ import HowItWorks from '@/components/HowItWorks'
 import CommunityStats from '@/components/CommunityStats'
 import { ScrollVelocityContainer, ScrollVelocityRow } from '@/components/magicui/scroll-based-velocity'
 import Newsletter from '@/components/newsletter'
-import Footer from '@/components/Footer'
 
 const popularItems = [
   "AP Biology Textbooks",
@@ -26,39 +23,32 @@ const popularItems = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen bg-white">
-      <AnnouncementBar />
-      <Navbar />
+    <>
+      <Hero />
+      <QuickCategories />
+      <ProductList />
+      <NewArrivals />
+      <Incentive />
+      <HowItWorks />
       
-      <main>
-        <Hero />
-        <QuickCategories />
-        <ProductList />
-        <NewArrivals />
-        <Incentive />
-        <HowItWorks />
-        
-        {/* Popular Items Marquee */}
-        <section className="py-12 bg-gray-50">
-          <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-            <h2 className="text-center text-2xl font-bold text-gray-900 mb-8">
-              Popular This Term
-            </h2>
-          </div>
-          <ScrollVelocityContainer className="w-full">
-            <ScrollVelocityRow baseVelocity={3} direction={1} className="py-4">
-              <div className="text-lg font-medium text-gray-600">
-                {popularItems.join(" • ") + " • "}
-              </div>
-            </ScrollVelocityRow>
-          </ScrollVelocityContainer>
-        </section>
-        
-        <CommunityStats />
-        <Newsletter />
-      </main>
+      {/* Popular Items Marquee */}
+      <section className="py-12 bg-gray-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h2 className="text-center text-2xl font-bold text-gray-900 mb-8">
+            Popular This Term
+          </h2>
+        </div>
+        <ScrollVelocityContainer className="w-full">
+          <ScrollVelocityRow baseVelocity={3} direction={1} className="py-4">
+            <div className="text-lg font-medium text-gray-600">
+              {popularItems.join(" • ") + " • "}
+            </div>
+          </ScrollVelocityRow>
+        </ScrollVelocityContainer>
+      </section>
       
-      <Footer />
-    </div>
+      <CommunityStats />
+      <Newsletter />
+    </>
   )
 }
