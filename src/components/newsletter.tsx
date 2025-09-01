@@ -25,7 +25,7 @@ export default function Newsletter() {
 
   return (
     <div className="bg-gradient-to-br from-emerald-600 via-emerald-500 to-teal-600">
-      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
         <div className="mx-auto max-w-2xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl">
             Never Miss a Deal
@@ -35,7 +35,7 @@ export default function Newsletter() {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="mx-auto mt-10 max-w-md">
+        <form onSubmit={handleSubmit} className="mx-auto mt-6 max-w-md">
           <div className="flex flex-col gap-4">
             <div className="relative">
               <label htmlFor="category" className="sr-only">
@@ -85,7 +85,7 @@ export default function Newsletter() {
           </p>
         </form>
 
-        <div className="mx-auto mt-12 grid max-w-2xl grid-cols-1 gap-8 sm:grid-cols-3 text-center">
+        <div className="mx-auto mt-8 grid max-w-2xl grid-cols-3 gap-4 sm:gap-8 text-center">
           <div>
             <div className="text-3xl font-bold text-white">89%</div>
             <div className="mt-1 text-sm text-emerald-100">Find items faster</div>

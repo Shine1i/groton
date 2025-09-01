@@ -6,6 +6,7 @@ import { motion } from 'motion/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import QuickViewModal from './QuickViewModal'
+import { useStore } from '@/store/useStore'
 
 const products = [
   {
@@ -17,6 +18,7 @@ const products = [
     condition: 'Like New',
     conditionColor: 'bg-green-100 text-green-800',
     seller: 'Alex Chen',
+    sellerId: 'alex-chen',
     dorm: 'Whitman Hall',
     imageSrc: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&h=400&fit=crop',
     imageAlt: 'Biology textbook on desk',
@@ -34,6 +36,7 @@ const products = [
     condition: 'Good',
     conditionColor: 'bg-yellow-100 text-yellow-800',
     seller: 'Sarah Johnson',
+    sellerId: 'sarah-johnson',
     dorm: 'Foster House',
     imageSrc: 'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=400&h=400&fit=crop',
     imageAlt: 'Compact mini fridge',
@@ -50,6 +53,7 @@ const products = [
     condition: 'Like New',
     conditionColor: 'bg-green-100 text-green-800',
     seller: 'Mike Williams',
+    sellerId: 'mike-williams',
     dorm: 'North Campus',
     imageSrc: 'https://images.unsplash.com/photo-1611125832047-1d7ad1e8e48f?w=400&h=400&fit=crop',
     imageAlt: 'Graphing calculator',
@@ -67,8 +71,9 @@ const products = [
     condition: 'Good',
     conditionColor: 'bg-yellow-100 text-yellow-800',
     seller: 'Tom Davis',
+    sellerId: 'alex-chen',
     dorm: 'Athletic Dorm',
-    imageSrc: 'https://images.unsplash.com/photo-1566479179474-c2e47c0fb0a1?w=400&h=400&fit=crop',
+    imageSrc: 'https://www.sportsetc.net/wp-content/uploads/2024/01/hackees-lacrosse-stick-lacrosse-stick-hackees-navy-476467.webp',
     imageAlt: 'Lacrosse stick',
     description: 'Well-maintained lacrosse stick. Great for beginners or backup equipment. Some wear on the head but still game-ready.',
     postedDate: '5 days ago',
@@ -89,6 +94,7 @@ export default function ProductList({
 }: ProductListProps) {
   const [selectedProduct, setSelectedProduct] = useState<typeof products[0] | null>(null)
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false)
+  const { createThread } = useStore()
 
   const handleQuickView = (product: typeof products[0]) => {
     setSelectedProduct(product)
@@ -99,10 +105,21 @@ export default function ProductList({
     setIsQuickViewOpen(false)
     setSelectedProduct(null)
   }
+  
+  const handleMessageSeller = (product: typeof products[0]) => {
+    createThread(product.sellerId, {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      imageSrc: product.imageSrc,
+      seller: product.seller,
+      sellerId: product.sellerId
+    })
+  }
 
   return (
     <>
-      <div className="bg-gray-50 py-16 sm:py-24">
+      <div className="bg-gray-50 py-8 sm:py-12">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div>
@@ -120,7 +137,7 @@ export default function ProductList({
             )}
           </div>
 
-          <div className="mt-8 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4 xl:gap-x-8">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
@@ -131,7 +148,7 @@ export default function ProductList({
               >
                 <div className="relative">
                   <div 
-                    className="w-full h-64 bg-gray-200 rounded-lg overflow-hidden group-hover:opacity-90 transition-opacity cursor-pointer"
+                    className="w-full h-40 sm:h-64 bg-gray-200 rounded-lg overflow-hidden group-hover:opacity-90 transition-opacity cursor-pointer"
                     onClick={() => handleQuickView(product)}
                   >
                     <Image
@@ -163,7 +180,7 @@ export default function ProductList({
                   <div className="flex items-start justify-between">
                     <div className="flex-1">
                       <h3 
-                        className="text-sm font-medium text-gray-900 cursor-pointer hover:text-emerald-600"
+                        className="text-xs sm:text-sm font-medium text-gray-900 cursor-pointer hover:text-emerald-600 line-clamp-2"
                         onClick={() => handleQuickView(product)}
                       >
                         {product.name}
@@ -176,31 +193,39 @@ export default function ProductList({
                     </div>
                   </div>
 
-                  <div className="mt-2 flex items-center text-sm text-gray-600">
-                    <MapPinIcon className="h-4 w-4 mr-1" />
-                    <span>{product.dorm}</span>
+                  <div className="mt-1 flex items-center text-xs sm:text-sm text-gray-600">
+                    <MapPinIcon className="h-3 w-3 sm:h-4 sm:w-4 mr-1" />
+                    <span className="truncate">{product.dorm}</span>
                   </div>
 
-                  <div className="mt-2 text-xs text-gray-500">
-                    <span>by {product.seller}</span>
+                  <div className="mt-1 text-xs text-gray-500">
+                    <span>by </span>
+                    <Link 
+                      href={`/profile/${product.sellerId}`} 
+                      className="hover:text-emerald-600 hover:underline"
+                    >
+                      {product.seller}
+                    </Link>
                   </div>
 
-                  <div className="mt-3 flex items-baseline gap-2">
-                    <p className="text-lg font-semibold text-gray-900">{product.price}</p>
-                    <p className="text-sm text-gray-500 line-through">{product.originalPrice}</p>
+                  <div className="mt-2">
+                    <p className="text-sm sm:text-lg font-semibold text-gray-900">{product.price}</p>
+                    <p className="text-xs sm:text-sm text-gray-500 line-through">{product.originalPrice}</p>
                     <span className="text-xs font-medium text-emerald-600">
                       Save {Math.round(((parseFloat(product.originalPrice.slice(1)) - parseFloat(product.price.slice(1))) / parseFloat(product.originalPrice.slice(1))) * 100)}%
                     </span>
                   </div>
 
-                  <div className="mt-4">
+                  <div className="mt-3">
                     <motion.button
                       whileHover={{ scale: 1.02 }}
                       whileTap={{ scale: 0.98 }}
-                      className="w-full inline-flex items-center justify-center rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors"
+                      onClick={() => handleMessageSeller(product)}
+                      className="w-full inline-flex items-center justify-center rounded-lg bg-emerald-600 px-2 py-1.5 sm:px-3 sm:py-2 text-xs sm:text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors"
                     >
-                      <ChatBubbleLeftRightIcon className="h-4 w-4 mr-2" />
-                      Message Seller
+                      <ChatBubbleLeftRightIcon className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                      <span className="hidden sm:inline">Message Seller</span>
+                      <span className="sm:hidden">Message</span>
                     </motion.button>
                   </div>
                 </div>

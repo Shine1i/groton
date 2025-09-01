@@ -1,6 +1,6 @@
 'use client'
 
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useMemo } from 'react'
 import {
   Dialog,
   DialogBackdrop,
@@ -22,6 +22,7 @@ import { motion } from 'motion/react'
 import Image from 'next/image'
 import Link from 'next/link'
 import QuickViewModal from '@/components/QuickViewModal'
+import { useStore } from '@/store/useStore'
 
 const sortOptions = [
   { name: 'Most Popular', value: 'popular' },
@@ -98,6 +99,7 @@ const allProducts = [
     condition: 'Like New',
     conditionColor: 'bg-green-100 text-green-800',
     seller: 'Alex Chen',
+    sellerId: 'alex-chen',
     dorm: 'Whitman Hall',
     imageSrc: 'https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&h=400&fit=crop',
     imageAlt: 'Biology textbook on desk',
@@ -115,6 +117,7 @@ const allProducts = [
     condition: 'Good',
     conditionColor: 'bg-yellow-100 text-yellow-800',
     seller: 'Sarah Johnson',
+    sellerId: 'sarah-johnson',
     dorm: 'Foster House',
     imageSrc: 'https://images.unsplash.com/photo-1571175443880-49e1d25b2bc5?w=400&h=400&fit=crop',
     imageAlt: 'Compact mini fridge',
@@ -131,6 +134,7 @@ const allProducts = [
     condition: 'Like New',
     conditionColor: 'bg-green-100 text-green-800',
     seller: 'Mike Williams',
+    sellerId: 'mike-williams',
     dorm: 'North Campus',
     imageSrc: 'https://images.unsplash.com/photo-1611125832047-1d7ad1e8e48f?w=400&h=400&fit=crop',
     imageAlt: 'Graphing calculator',
@@ -148,8 +152,9 @@ const allProducts = [
     condition: 'Good',
     conditionColor: 'bg-yellow-100 text-yellow-800',
     seller: 'Tom Davis',
+    sellerId: 'alex-chen',
     dorm: 'Athletic Dorm',
-    imageSrc: 'https://images.unsplash.com/photo-1566479179474-c2e47c0fb0a1?w=400&h=400&fit=crop',
+    imageSrc: 'https://www.sportsetc.net/wp-content/uploads/2024/01/hackees-lacrosse-stick-lacrosse-stick-hackees-navy-476467.webp',
     imageAlt: 'Lacrosse stick',
     description: 'Well-maintained lacrosse stick. Great for beginners.',
     postedDate: '5 days ago',
@@ -164,6 +169,7 @@ const allProducts = [
     condition: 'Good',
     conditionColor: 'bg-yellow-100 text-yellow-800',
     seller: 'James Brown',
+    sellerId: 'mike-williams',
     dorm: 'East Wing',
     imageSrc: 'https://images.unsplash.com/photo-1594938298603-c8148c4dae35?w=400&h=400&fit=crop',
     imageAlt: 'School uniform blazer',
@@ -180,6 +186,7 @@ const allProducts = [
     condition: 'Fair',
     conditionColor: 'bg-orange-100 text-orange-800',
     seller: 'Chris Lee',
+    sellerId: 'alex-chen',
     dorm: 'Arts House',
     imageSrc: 'https://images.unsplash.com/photo-1510915361894-db8b60106cb1?w=400&h=400&fit=crop',
     imageAlt: 'Acoustic guitar',
@@ -197,8 +204,9 @@ const allProducts = [
     condition: 'Like New',
     conditionColor: 'bg-green-100 text-green-800',
     seller: 'Lisa Park',
+    sellerId: 'sarah-johnson',
     dorm: 'Science Center',
-    imageSrc: 'https://images.unsplash.com/photo-1632571981775-db19db76581e?w=400&h=400&fit=crop',
+    imageSrc: 'https://cdn.schoolspecialty.com/881209a5-f76d-46a7-8734-b1970064d7bd/529267_JPG%20Output.jpg',
     imageAlt: 'Chemistry model kit',
     description: 'Complete molecular model kit for organic chemistry.',
     postedDate: '12 hours ago',
@@ -213,8 +221,9 @@ const allProducts = [
     condition: 'New',
     conditionColor: 'bg-blue-100 text-blue-800',
     seller: 'Emma Wilson',
+    sellerId: 'emma-wilson',
     dorm: 'South Hall',
-    imageSrc: 'https://images.unsplash.com/photo-1565636192335-5710de816b26?w=400&h=400&fit=crop',
+    imageSrc: 'https://luxledlights.com/cdn/shop/files/Brooklyn_Desk-USB_Black-Slate_1200x1200_5fda5593-2d09-4f46-9102-bcf0c3e8e5db-01.webp',
     imageAlt: 'Modern desk lamp',
     badge: 'New',
     description: 'Brand new LED desk lamp with two USB charging ports.',
@@ -230,6 +239,7 @@ const allProducts = [
     condition: 'Good',
     conditionColor: 'bg-yellow-100 text-yellow-800',
     seller: 'David Kim',
+    sellerId: 'mike-williams',
     dorm: 'Tech House',
     imageSrc: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop',
     imageAlt: 'MacBook Pro laptop',
@@ -247,6 +257,7 @@ const allProducts = [
     condition: 'Good',
     conditionColor: 'bg-yellow-100 text-yellow-800',
     seller: 'Ryan Miller',
+    sellerId: 'alex-chen',
     dorm: 'Athletic Dorm',
     imageSrc: 'https://images.unsplash.com/photo-1518611012118-696072aa579a?w=400&h=400&fit=crop',
     imageAlt: 'Hockey equipment',
@@ -263,8 +274,9 @@ const allProducts = [
     condition: 'Like New',
     conditionColor: 'bg-green-100 text-green-800',
     seller: 'Amy Zhang',
+    sellerId: 'emma-wilson',
     dorm: 'Arts House',
-    imageSrc: 'https://images.unsplash.com/photo-1563207153-f403a16ddd9e?w=400&h=400&fit=crop',
+    imageSrc: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSqcOFBra82GDleZ_SpJVOYPvpa9-6CavhQFg&s',
     imageAlt: 'Digital drawing tablet',
     description: 'Professional drawing tablet, barely used.',
     postedDate: '1 day ago',
@@ -279,6 +291,7 @@ const allProducts = [
     condition: 'Good',
     conditionColor: 'bg-yellow-100 text-yellow-800',
     seller: 'Sophie Chen',
+    sellerId: 'sarah-johnson',
     dorm: 'West Hall',
     imageSrc: 'https://images.unsplash.com/photo-1583743814966-8936f5b7be1a?w=400&h=400&fit=crop',
     imageAlt: 'School winter uniform',
@@ -295,6 +308,7 @@ export default function BrowsePage() {
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({})
   const [selectedProduct, setSelectedProduct] = useState<typeof allProducts[0] | null>(null)
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false)
+  const { createThread } = useStore()
 
   const handleQuickView = (product: typeof allProducts[0]) => {
     setSelectedProduct(product)
@@ -304,6 +318,17 @@ export default function BrowsePage() {
   const handleCloseQuickView = () => {
     setIsQuickViewOpen(false)
     setSelectedProduct(null)
+  }
+  
+  const handleMessageSeller = (product: typeof allProducts[0]) => {
+    createThread(product.sellerId, {
+      id: product.id,
+      name: product.name,
+      price: product.price,
+      imageSrc: product.imageSrc,
+      seller: product.seller,
+      sellerId: product.sellerId
+    })
   }
 
   const handleFilterChange = (filterId: string, value: string, checked: boolean) => {
@@ -318,6 +343,79 @@ export default function BrowsePage() {
   }
 
   const activeFiltersCount = Object.values(selectedFilters).flat().length
+  
+  // Filter and search products
+  const filteredProducts = useMemo(() => {
+    let filtered = [...allProducts]
+    
+    // Apply search query
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase()
+      filtered = filtered.filter(product => 
+        product.name.toLowerCase().includes(query) ||
+        product.description.toLowerCase().includes(query) ||
+        product.category.toLowerCase().includes(query) ||
+        product.seller.toLowerCase().includes(query) ||
+        product.dorm.toLowerCase().includes(query)
+      )
+    }
+    
+    // Apply category filter
+    if (selectedFilters.category?.length > 0) {
+      filtered = filtered.filter(product => {
+        const productCategory = product.category.toLowerCase().replace(/\s+/g, '-')
+        return selectedFilters.category.some(cat => {
+          if (cat === 'textbooks') return product.category === 'Textbooks'
+          if (cat === 'dorm') return product.category === 'Dorm Essentials'
+          if (cat === 'electronics') return product.category === 'Electronics'
+          if (cat === 'sports') return product.category === 'Sports'
+          if (cat === 'uniforms') return product.category === 'Uniforms'
+          if (cat === 'arts') return product.category === 'Arts'
+          return false
+        })
+      })
+    }
+    
+    // Apply condition filter
+    if (selectedFilters.condition?.length > 0) {
+      filtered = filtered.filter(product => {
+        return selectedFilters.condition.some(cond => {
+          if (cond === 'new') return product.condition === 'New'
+          if (cond === 'like-new') return product.condition === 'Like New'
+          if (cond === 'good') return product.condition === 'Good'
+          if (cond === 'fair') return product.condition === 'Fair'
+          return false
+        })
+      })
+    }
+    
+    // Apply price filter
+    if (selectedFilters.price?.length > 0) {
+      filtered = filtered.filter(product => {
+        const price = parseFloat(product.price.slice(1))
+        return selectedFilters.price.some(range => {
+          if (range === '0-25') return price < 25
+          if (range === '25-50') return price >= 25 && price < 50
+          if (range === '50-100') return price >= 50 && price < 100
+          if (range === '100-200') return price >= 100 && price < 200
+          if (range === '200+') return price >= 200
+          return false
+        })
+      })
+    }
+    
+    // Apply sorting
+    if (selectedSort.value === 'price-asc') {
+      filtered.sort((a, b) => parseFloat(a.price.slice(1)) - parseFloat(b.price.slice(1)))
+    } else if (selectedSort.value === 'price-desc') {
+      filtered.sort((a, b) => parseFloat(b.price.slice(1)) - parseFloat(a.price.slice(1)))
+    } else if (selectedSort.value === 'newest') {
+      // Sort by posted date (would need actual dates in real app)
+      filtered.reverse()
+    }
+    
+    return filtered
+  }, [searchQuery, selectedFilters, selectedSort, allProducts])
 
   return (
     <>
@@ -414,7 +512,7 @@ export default function BrowsePage() {
 
         <div className="mx-auto max-w-2xl px-4 lg:max-w-7xl lg:px-8">
           {/* Header */}
-          <div className="border-b border-gray-200 pt-24 pb-10">
+          <div className="border-b border-gray-200 pt-16 pb-6">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">Browse All Listings</h1>
             <p className="mt-4 text-base text-gray-500">
               Discover great deals from your fellow students across all categories
@@ -471,7 +569,7 @@ export default function BrowsePage() {
           </div>
 
           {/* Filters and Product Grid */}
-          <div className="pt-12 pb-24 lg:grid lg:grid-cols-3 lg:gap-x-8 xl:grid-cols-4">
+          <div className="pt-6 pb-12 lg:grid lg:grid-cols-3 lg:gap-x-8 xl:grid-cols-4">
             <aside>
               <h2 className="sr-only">Filters</h2>
               
@@ -494,7 +592,7 @@ export default function BrowsePage() {
               <div className="hidden lg:block">
                 <form className="divide-y divide-gray-200">
                   {filters.map((section) => (
-                    <div key={section.name} className="py-10 first:pt-0 last:pb-0">
+                    <div key={section.name} className="py-6 first:pt-0 last:pb-0">
                       <fieldset>
                         <legend className="block text-sm font-medium text-gray-900">{section.name}</legend>
                         <div className="space-y-3 pt-6">
@@ -561,7 +659,7 @@ export default function BrowsePage() {
               {/* Sort Options */}
               <div className="flex items-center justify-between mb-6">
                 <div className="text-sm text-gray-500">
-                  Showing <span className="font-medium text-gray-900">{allProducts.length}</span> results
+                  Showing <span className="font-medium text-gray-900">{filteredProducts.length}</span> results
                 </div>
                 <div className="flex items-center">
                   <label htmlFor="sort" className="mr-2 text-sm text-gray-500">
@@ -583,8 +681,17 @@ export default function BrowsePage() {
               </div>
               
               {/* Products */}
-              <div className="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 xl:grid-cols-3">
-                {allProducts.map((product, index) => (
+              <div className="grid grid-cols-2 gap-3 sm:gap-x-6 sm:gap-y-10 lg:gap-x-8 xl:grid-cols-3">
+                {filteredProducts.length === 0 ? (
+                  <div className="col-span-full py-12 text-center">
+                    <div className="mx-auto w-24 h-24 bg-gray-100 rounded-full flex items-center justify-center mb-4">
+                      <MagnifyingGlassIcon className="h-12 w-12 text-gray-400" />
+                    </div>
+                    <h3 className="text-lg font-medium text-gray-900 mb-2">No products found</h3>
+                    <p className="text-gray-500">Try adjusting your search or filters</p>
+                  </div>
+                ) : (
+                  filteredProducts.map((product, index) => (
                   <motion.div
                     key={product.id}
                     initial={{ opacity: 0, y: 20 }}
@@ -646,7 +753,7 @@ export default function BrowsePage() {
                       </div>
                       
                       <div className="mt-2 text-xs text-gray-500">
-                        by {product.seller} • {product.postedDate}
+                        by <Link href={`/profile/${product.sellerId}`} className="hover:text-emerald-600 hover:underline">{product.seller}</Link> • {product.postedDate}
                       </div>
                       
                       <div className="mt-auto pt-4">
@@ -658,6 +765,7 @@ export default function BrowsePage() {
                         <motion.button
                           whileHover={{ scale: 1.02 }}
                           whileTap={{ scale: 0.98 }}
+                          onClick={() => handleMessageSeller(product)}
                           className="mt-3 w-full inline-flex items-center justify-center rounded-lg bg-emerald-600 px-3 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2 transition-colors"
                         >
                           <ChatBubbleLeftRightIcon className="h-4 w-4 mr-2" />
@@ -666,11 +774,12 @@ export default function BrowsePage() {
                       </div>
                     </div>
                   </motion.div>
-                ))}
+                  ))
+                )}
               </div>
 
               {/* Load More */}
-              <div className="mt-12 text-center">
+              <div className="mt-8 text-center">
                 <button className="inline-flex items-center rounded-lg border border-gray-300 bg-white px-6 py-3 text-sm font-medium text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-2">
                   Load more listings
                 </button>

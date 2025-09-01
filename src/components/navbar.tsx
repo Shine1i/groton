@@ -1,6 +1,6 @@
 "use client"
 
-import { Fragment, useState } from 'react'
+import { Fragment, useState, useEffect } from 'react'
 import { Dialog, Popover, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
@@ -13,6 +13,8 @@ import {
 } from '@heroicons/react/24/outline'
 import Link from 'next/link'
 import { motion } from 'motion/react'
+import { useStore } from '@/store/useStore'
+import ChatList from '@/components/ChatList'
 
 const navigation = {
   categories: [
@@ -40,6 +42,11 @@ const navigation = {
 
 export default function Navbar() {
   const [open, setOpen] = useState(false)
+  const [chatListOpen, setChatListOpen] = useState(false)
+  const { messageThreads } = useStore()
+  
+  // Calculate total unread messages
+  const totalUnread = messageThreads.reduce((sum, thread) => sum + thread.unreadCount, 0)
 
   return (
     <div className="bg-white sticky top-0 z-50">
@@ -201,7 +208,7 @@ export default function Navbar() {
                                       </div>
                                     ))}
                                   </div>
-                                  <div className="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-sm">
+                                  <div className="row-start-1 grid grid-cols-3 gap-x-8 gap-y-10 text-xl">
                                     {category.categories.map((item) => (
                                       <div key={item.name}>
                                         <Link href={item.href} className="font-medium text-gray-900 hover:text-emerald-600">
@@ -252,14 +259,24 @@ export default function Navbar() {
 
               {/* Messages */}
               <div className="ml-4 flow-root lg:ml-6">
-                <Link href="/messages" className="group -m-2 flex items-center p-2">
+                <button 
+                  onClick={() => setChatListOpen(true)}
+                  className="group -m-2 flex items-center p-2 relative"
+                >
                   <ChatBubbleLeftRightIcon
                     className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                     aria-hidden="true"
                   />
-                  <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">3</span>
+                  <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">
+                    {totalUnread > 0 ? totalUnread : ''}
+                  </span>
+                  {totalUnread > 0 && (
+                    <span className="absolute -top-1 -right-1 h-4 w-4 rounded-full bg-red-500 flex items-center justify-center">
+                      <span className="text-xs text-white font-bold">{totalUnread > 9 ? '9+' : totalUnread}</span>
+                    </span>
+                  )}
                   <span className="sr-only">messages</span>
-                </Link>
+                </button>
               </div>
 
               {/* Cart */}
@@ -276,7 +293,7 @@ export default function Navbar() {
 
               {/* Profile */}
               <div className="ml-4 flow-root lg:ml-6">
-                <Link href="/signin" className="group -m-2 flex items-center p-2">
+                <Link href="/profile/current-user" className="group -m-2 flex items-center p-2">
                   <UserIcon
                     className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
                     aria-hidden="true"
@@ -287,6 +304,9 @@ export default function Navbar() {
           </div>
         </nav>
       </header>
+      
+      {/* Chat List Panel */}
+      <ChatList isOpen={chatListOpen} onClose={() => setChatListOpen(false)} />
     </div>
   )
 }

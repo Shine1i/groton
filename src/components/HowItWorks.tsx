@@ -40,7 +40,7 @@ const steps = [
 
 export default function HowItWorks() {
   return (
-    <div className="bg-gradient-to-b from-gray-50 to-white py-16 sm:py-24">
+    <div className="bg-gradient-to-b from-gray-50 to-white py-8 sm:py-12">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
@@ -51,7 +51,7 @@ export default function HowItWorks() {
           </p>
         </div>
 
-        <div className="mt-12">
+        <div className="mt-8">
           <div className="relative">
             {/* Connection line for desktop */}
             <div className="hidden lg:block absolute top-10 left-24 right-24 h-0.5 bg-gray-200" aria-hidden="true" />
@@ -97,7 +97,7 @@ export default function HowItWorks() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.5 }}
-          className="mt-16 text-center"
+          className="mt-10 text-center"
         >
           <div className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-50 rounded-full">
             <span className="flex h-2 w-2">
