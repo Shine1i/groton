@@ -9,7 +9,7 @@ export default function Hero() {
     <div className="relative overflow-hidden bg-gradient-to-br from-emerald-50 via-white to-teal-50">
       <div className="absolute inset-0 bg-grid-slate-100 [mask-image:linear-gradient(0deg,white,rgba(255,255,255,0.6))] -z-10" />
       
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-12 pb-8 text-center lg:pt-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8 pb-6 text-center lg:pt-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -30,8 +30,8 @@ export default function Hero() {
             </span>{' '}
             Students
           </h1>
-          <p className="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-slate-700">
-            Buy, sell, borrow, and trade textbooks, dorm essentials, and more with your fellow students. 
+          <p className="mx-auto mt-4 max-w-2xl text-lg tracking-tight text-slate-700">
+            Your Campus Hub - Buy, sell, learn, and connect with your fellow students.
             Safe, convenient, and built for campus life.
           </p>
         </motion.div>
@@ -40,7 +40,7 @@ export default function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="mt-10 flex flex-col sm:flex-row justify-center gap-4"
+          className="mt-6 flex flex-col sm:flex-row justify-center gap-4"
         >
           <Link
             href="/sell"
@@ -61,7 +61,7 @@ export default function Hero() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
-          className="mt-8 flex flex-wrap justify-center gap-4"
+          className="mt-6 flex flex-wrap justify-center gap-4"
         >
           <div className="flex items-center gap-2 text-sm text-slate-600">
             <ShieldCheckIcon className="h-5 w-5 text-emerald-600" />
@@ -81,8 +81,8 @@ export default function Hero() {
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, delay: 0.6 }}
-          className="mt-10 relative"
-        >
+          className="mt-6 relative">
+       
           <div className="absolute inset-0 bg-gradient-to-t from-white via-transparent to-transparent z-10 pointer-events-none" />
           <div className="bg-white rounded-2xl shadow-2xl p-2 border border-slate-200">
             <div className="bg-gradient-to-br from-emerald-50 to-teal-50 rounded-xl p-8">

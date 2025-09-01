@@ -15,6 +15,7 @@ import Link from 'next/link'
 import { motion } from 'motion/react'
 import { useStore } from '@/store/useStore'
 import ChatList from '@/components/ChatList'
+import { SellListingDialog } from '@/components/SellListingDialog'
 
 const navigation = {
   categories: [
@@ -35,8 +36,9 @@ const navigation = {
     },
   ],
   pages: [
-    { name: 'How It Works', href: '/how-it-works' },
-    { name: 'Safety', href: '/safety' },
+    { name: 'Tutoring', href: '/tutoring' },
+    { name: 'Alumni', href: '/alumni' },
+    { name: 'Programs', href: '/programs' },
   ],
 }
 
@@ -49,7 +51,7 @@ export default function Navbar() {
   const totalUnread = messageThreads.reduce((sum, thread) => sum + thread.unreadCount, 0)
 
   return (
-    <div className="bg-white sticky top-0 z-50">
+    <div className="bg-white sticky top-0 z-10">
       {/* Mobile menu */}
       <Transition.Root show={open} as={Fragment}>
         <Dialog as="div" className="relative z-40 lg:hidden" onClose={setOpen}>
@@ -241,17 +243,23 @@ export default function Navbar() {
 
             <div className="ml-auto flex items-center">
               {/* Sell button */}
-              <Link
-                href="/sell"
-                className="hidden lg:flex items-center text-sm font-medium text-emerald-600 hover:text-emerald-700 mr-6"
-              >
-                <PlusCircleIcon className="h-5 w-5 mr-1" />
-                Sell
-              </Link>
+              <div className="hidden lg:flex mr-6">
+                <SellListingDialog />
+              </div>
 
-              {/* Search */}
+              {/* Sell button for mobile, Search for desktop */}
               <div className="flex lg:ml-6">
-                <button className="p-2 text-gray-400 hover:text-gray-500">
+                <div className="lg:hidden">
+                  <SellListingDialog 
+                    trigger={
+                      <button className="p-2 text-emerald-600 hover:text-emerald-700">
+                        <PlusCircleIcon className="h-6 w-6" aria-hidden="true" />
+                        <span className="sr-only">Sell</span>
+                      </button>
+                    }
+                  />
+                </div>
+                <button className="hidden lg:block p-2 text-gray-400 hover:text-gray-500">
                   <span className="sr-only">Search</span>
                   <MagnifyingGlassIcon className="h-6 w-6" aria-hidden="true" />
                 </button>
@@ -279,17 +287,7 @@ export default function Navbar() {
                 </button>
               </div>
 
-              {/* Cart */}
-              <div className="ml-4 flow-root lg:ml-6">
-                <Link href="/cart" className="group -m-2 flex items-center p-2">
-                  <ShoppingBagIcon
-                    className="h-6 w-6 flex-shrink-0 text-gray-400 group-hover:text-gray-500"
-                    aria-hidden="true"
-                  />
-                  <span className="ml-2 text-sm font-medium text-gray-700 group-hover:text-gray-800">0</span>
-                  <span className="sr-only">items in cart, view bag</span>
-                </Link>
-              </div>
+           
 
               {/* Profile */}
               <div className="ml-4 flow-root lg:ml-6">

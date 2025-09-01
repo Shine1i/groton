@@ -70,18 +70,18 @@ const categories = [
 
 export default function QuickCategories() {
   return (
-    <div className="bg-white py-8 sm:py-12">
+    <div className="bg-white py-6 sm:py-8">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Shop by Category
           </h2>
-          <p className="mt-4 text-lg text-gray-600">
+          <p className="mt-2 text-lg text-gray-600">
             Find exactly what you need for campus life
           </p>
         </div>
 
-        <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:gap-3 lg:grid-cols-3">
           {categories.map((category, index) => (
             <motion.div
               key={category.name}
@@ -114,7 +114,7 @@ export default function QuickCategories() {
           ))}
         </div>
 
-        <div className="mt-6 text-center">
+        <div className="mt-4 text-center">
           <Link
             href="/categories"
             className="inline-flex items-center text-sm font-medium text-emerald-600 hover:text-emerald-700"

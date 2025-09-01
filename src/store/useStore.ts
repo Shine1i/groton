@@ -32,9 +32,17 @@ export interface Product {
   id: number
   name: string
   price: string
+  originalPrice?: string
   imageSrc: string
+  imageAlt?: string
   seller: string
   sellerId: string
+  category?: string
+  condition?: string
+  conditionColor?: string
+  description?: string
+  postedDate?: string
+  meetupLocation?: string
 }
 
 export interface MessageThread {
@@ -157,6 +165,10 @@ interface StoreState {
   notifications: Notification[]
   unreadNotifications: number
   
+  // Listings
+  userListings: Product[]
+  draftListing: Partial<Product> | null
+  
   // Actions
   createThread: (sellerId: string, product?: Product) => string
   sendMessage: (threadId: string, text: string) => void
@@ -172,6 +184,13 @@ interface StoreState {
   // Simulate seller response
   simulateResponse: (threadId: string, delay?: number) => void
   setTyping: (threadId: string, isTyping: boolean) => void
+  
+  // Listing Actions
+  createListing: (listing: Omit<Product, 'id' | 'postedDate' | 'seller' | 'sellerId'>) => void
+  updateListing: (id: number, updates: Partial<Product>) => void
+  deleteListing: (id: number) => void
+  saveDraft: (draft: Partial<Product>) => void
+  clearDraft: () => void
 }
 
 // Create Store
@@ -182,6 +201,8 @@ export const useStore = create<StoreState>()(
       activeChats: [],
       notifications: [],
       unreadNotifications: 0,
+      userListings: [],
+      draftListing: null,
 
       createThread: (sellerId: string, product?: Product) => {
         const existingThread = get().messageThreads.find(
@@ -383,13 +404,59 @@ export const useStore = create<StoreState>()(
             thread.id === threadId ? { ...thread, isTyping } : thread
           )
         }))
+      },
+
+      createListing: (listing) => {
+        const newListing: Product = {
+          ...listing,
+          id: Date.now(),
+          postedDate: 'Just now',
+          seller: mockUsers['current-user'].name,
+          sellerId: 'current-user'
+        }
+
+        set(state => ({
+          userListings: [...state.userListings, newListing],
+          draftListing: null
+        }))
+
+        // Add success notification
+        get().addNotification({
+          type: 'sold',
+          title: 'Listing Created!',
+          message: `Your listing for "${newListing.name}" is now live.`
+        })
+      },
+
+      updateListing: (id, updates) => {
+        set(state => ({
+          userListings: state.userListings.map(listing =>
+            listing.id === id ? { ...listing, ...updates } : listing
+          )
+        }))
+      },
+
+      deleteListing: (id) => {
+        set(state => ({
+          userListings: state.userListings.filter(listing => listing.id !== id)
+        }))
+      },
+
+      saveDraft: (draft) => {
+        set({ draftListing: draft })
+      },
+
+      clearDraft: () => {
+        set({ draftListing: null })
       }
     }),
     {
       name: 'campusswap-storage',
       partialize: (state) => ({
         messageThreads: state.messageThreads,
-        notifications: state.notifications
+        notifications: state.notifications,
+        userListings: state.userListings,
+        draftListing: state.draftListing
       })
     }
   )

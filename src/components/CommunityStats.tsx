@@ -42,18 +42,18 @@ function CountUp({ end, duration = 2, prefix = '', suffix = '' }: { end: number;
 
 export default function CommunityStats() {
   return (
-    <div className="bg-white py-8 sm:py-12">
+    <div className="bg-white py-6 sm:py-8">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-4xl text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Trusted by students across campus
           </h2>
-          <p className="mt-3 text-lg text-gray-600">
+          <p className="mt-2 text-lg text-gray-600">
             Join a thriving community making campus commerce sustainable and affordable
           </p>
         </div>
         
-        <dl className="mt-8 grid grid-cols-2 gap-0.5 overflow-hidden rounded-2xl text-center lg:grid-cols-4">
+        <dl className="mt-6 grid grid-cols-2 gap-0.5 overflow-hidden rounded-2xl text-center lg:grid-cols-4">
           {stats.map((stat, index) => (
             <motion.div
               key={stat.id}
@@ -75,7 +75,7 @@ export default function CommunityStats() {
           ))}
         </dl>
 
-        <div className="mt-8 text-center">
+        <div className="mt-6 text-center">
           <div className="inline-flex items-center gap-3 rounded-full bg-emerald-50 px-6 py-3">
             <svg className="h-5 w-5 text-emerald-600" fill="currentColor" viewBox="0 0 20 20">
               <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-8.293l-3-3a1 1 0 00-1.414 1.414L10.586 9.5H7a1 1 0 100 2h3.586l-1.293 1.293a1 1 0 101.414 1.414l3-3a1 1 0 000-1.414z" clipRule="evenodd" />

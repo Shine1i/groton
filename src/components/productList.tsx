@@ -119,7 +119,7 @@ export default function ProductList({
 
   return (
     <>
-      <div className="bg-gray-50 py-8 sm:py-12">
+      <div className="bg-gray-50 py-6 sm:py-10">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between">
             <div>
@@ -137,7 +137,7 @@ export default function ProductList({
             )}
           </div>
 
-          <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-6 lg:grid-cols-4 xl:gap-x-8">
+          <div className="mt-4 grid grid-cols-2 gap-2 sm:gap-4 lg:grid-cols-4 xl:gap-x-6">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
@@ -234,7 +234,7 @@ export default function ProductList({
           </div>
 
           {showViewAll && (
-            <div className="mt-8 text-center sm:hidden">
+            <div className="mt-6 text-center sm:hidden">
               <Link
                 href="/browse"
                 className="text-sm font-medium text-emerald-600 hover:text-emerald-700"

@@ -24,17 +24,17 @@ const incentives = [
 export default function Incentive() {
   return (
     <div className="bg-white">
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
+      <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
         <div className="text-center">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
             Why CampusSwap?
           </h2>
-          <p className="mt-4 text-lg text-gray-600">
+          <p className="mt-2 text-lg text-gray-600">
             Built by students, for students. A marketplace that understands campus life.
           </p>
         </div>
 
-        <div className="mx-auto mt-8 max-w-md sm:max-w-none">
+        <div className="mx-auto mt-6 max-w-md sm:max-w-none">
           <div className="grid grid-cols-1 gap-y-10 gap-x-8 sm:grid-cols-3">
             {incentives.map((incentive, index) => (
               <motion.div
@@ -62,7 +62,7 @@ export default function Incentive() {
           </div>
         </div>
 
-        <div className="mt-10 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-6 sm:p-8 text-center">
+        <div className="mt-8 bg-gradient-to-r from-emerald-50 to-teal-50 rounded-2xl p-4 sm:p-6 text-center">
           <div className="mx-auto max-w-2xl">
             <h3 className="text-2xl font-bold text-gray-900">Join 1,500+ students already saving</h3>
             <p className="mt-3 text-gray-600">

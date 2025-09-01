@@ -308,7 +308,7 @@ export default function BrowsePage() {
   const [selectedFilters, setSelectedFilters] = useState<Record<string, string[]>>({})
   const [selectedProduct, setSelectedProduct] = useState<typeof allProducts[0] | null>(null)
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false)
-  const { createThread } = useStore()
+  const { createThread, userListings } = useStore()
 
   const handleQuickView = (product: typeof allProducts[0]) => {
     setSelectedProduct(product)
@@ -344,9 +344,19 @@ export default function BrowsePage() {
 
   const activeFiltersCount = Object.values(selectedFilters).flat().length
   
+  // Combine user listings with mock products
+  const combinedProducts = useMemo(() => {
+    // Add user badge to user listings
+    const userListingsWithBadge = userListings.map(listing => ({
+      ...listing,
+      isUserListing: true
+    }))
+    return [...userListingsWithBadge, ...allProducts]
+  }, [userListings])
+  
   // Filter and search products
   const filteredProducts = useMemo(() => {
-    let filtered = [...allProducts]
+    let filtered = [...combinedProducts]
     
     // Apply search query
     if (searchQuery.trim()) {
@@ -415,7 +425,7 @@ export default function BrowsePage() {
     }
     
     return filtered
-  }, [searchQuery, selectedFilters, selectedSort, allProducts])
+  }, [searchQuery, selectedFilters, selectedSort, combinedProducts])
 
   return (
     <>
@@ -712,15 +722,16 @@ export default function BrowsePage() {
                           className="object-cover w-full h-full group-hover:opacity-90 transition-opacity"
                         />
                       </div>
-                      {product.badge && (
+                      {(product.badge || product.isUserListing) && (
                         <div className="absolute top-2 left-2">
                           <span className={`inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium ${
+                            product.isUserListing ? 'bg-purple-100 text-purple-800' :
                             product.badge === 'Hot Deal' ? 'bg-red-100 text-red-800' :
                             product.badge === 'Top Rated' ? 'bg-emerald-100 text-emerald-800' :
                             product.badge === 'New' ? 'bg-blue-100 text-blue-800' :
                             'bg-purple-100 text-purple-800'
                           }`}>
-                            {product.badge}
+                            {product.isUserListing ? 'Your Listing' : product.badge}
                           </span>
                         </div>
                       )}

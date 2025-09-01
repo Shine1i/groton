@@ -20,6 +20,7 @@ import {
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid'
 import { mockUsers, useStore } from '@/store/useStore'
 import QuickViewModal from '@/components/QuickViewModal'
+import ChatList from '@/components/ChatList'
 
 // Mock products for the profile
 const userListings = [
@@ -101,14 +102,28 @@ export default function ProfilePage() {
   const [activeTab, setActiveTab] = useState<'listings' | 'reviews' | 'about'>('listings')
   const [selectedProduct, setSelectedProduct] = useState<any>(null)
   const [isQuickViewOpen, setIsQuickViewOpen] = useState(false)
+  const [chatListOpen, setChatListOpen] = useState(false)
   
-  const { createThread } = useStore()
+  const { createThread, messageThreads, userListings, deleteListing } = useStore()
   
   // Get user from mock data
   const user = mockUsers[userId] || mockUsers['alex-chen']
   
+  // Check if viewing own profile
+  const isOwnProfile = userId === 'current-user'
+  
+  // Calculate total unread messages
+  const totalUnread = messageThreads.reduce((sum, thread) => sum + thread.unreadCount, 0)
+  
+  // Use actual user listings if viewing own profile, otherwise use mock listings  
+  const displayListings = isOwnProfile ? (userListings.length > 0 ? userListings : userListings) : userListings
+  
   const handleMessage = () => {
-    createThread(user.id)
+    if (isOwnProfile) {
+      setChatListOpen(true)
+    } else {
+      createThread(user.id)
+    }
   }
   
   const handleQuickView = (product: any) => {
@@ -155,17 +170,26 @@ export default function ProfilePage() {
                   <div className="flex gap-2">
                     <button
                       onClick={handleMessage}
-                      className="inline-flex items-center px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors"
+                      className="inline-flex items-center px-4 py-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700 transition-colors relative"
                     >
                       <ChatBubbleLeftRightIcon className="h-5 w-5 mr-2" />
-                      Message
+                      {isOwnProfile ? 'My Chats' : 'Message'}
+                      {isOwnProfile && totalUnread > 0 && (
+                        <span className="absolute -top-1 -right-1 h-5 w-5 rounded-full bg-red-500 flex items-center justify-center">
+                          <span className="text-xs text-white font-bold">{totalUnread > 9 ? '9+' : totalUnread}</span>
+                        </span>
+                      )}
                     </button>
-                    <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                      <ShareIcon className="h-5 w-5 text-gray-600" />
-                    </button>
-                    <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
-                      <FlagIcon className="h-5 w-5 text-gray-600" />
-                    </button>
+                    {!isOwnProfile && (
+                      <>
+                        <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                          <ShareIcon className="h-5 w-5 text-gray-600" />
+                        </button>
+                        <button className="p-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors">
+                          <FlagIcon className="h-5 w-5 text-gray-600" />
+                        </button>
+                      </>
+                    )}
                   </div>
                 </div>
                 
@@ -236,7 +260,7 @@ export default function ProfilePage() {
               {/* Listings Tab */}
               {activeTab === 'listings' && (
                 <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-                  {userListings.map((product, index) => (
+                  {displayListings.map((product, index) => (
                     <motion.div
                       key={product.id}
                       initial={{ opacity: 0, y: 20 }}
@@ -257,9 +281,38 @@ export default function ProfilePage() {
                             className="w-full h-full object-cover group-hover:opacity-90 transition-opacity"
                           />
                         </div>
-                        <button className="absolute top-2 right-2 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white transition-colors">
-                          <BookmarkIcon className="h-4 w-4 text-gray-600" />
-                        </button>
+                        {isOwnProfile ? (
+                          <div className="absolute top-2 right-2 flex gap-1">
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                // Edit functionality could be added here
+                              }}
+                              className="p-1.5 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white transition-colors"
+                            >
+                              <svg className="h-3.5 w-3.5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                              </svg>
+                            </button>
+                            <button 
+                              onClick={(e) => {
+                                e.stopPropagation()
+                                if (confirm('Are you sure you want to delete this listing?')) {
+                                  deleteListing(product.id)
+                                }
+                              }}
+                              className="p-1.5 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white transition-colors"
+                            >
+                              <svg className="h-3.5 w-3.5 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                              </svg>
+                            </button>
+                          </div>
+                        ) : (
+                          <button className="absolute top-2 right-2 p-2 rounded-full bg-white/80 backdrop-blur-sm hover:bg-white transition-colors">
+                            <BookmarkIcon className="h-4 w-4 text-gray-600" />
+                          </button>
+                        )}
                       </div>
                       
                       <div className="mt-3">
@@ -393,6 +446,9 @@ export default function ProfilePage() {
         isOpen={isQuickViewOpen}
         onClose={() => setIsQuickViewOpen(false)}
       />
+      
+      {/* Chat List Panel */}
+      <ChatList isOpen={chatListOpen} onClose={() => setChatListOpen(false)} />
     </>
   )
 }
